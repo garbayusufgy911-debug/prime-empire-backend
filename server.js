@@ -4,36 +4,20 @@ const app = express();
 
 app.use(express.json());
 
-// Health check route (for Railway / uptime checks)
+// Test route (IMPORTANT)
 app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Prime Empire Backend is LIVE ",
-    status: "running"
-  });
+  res.send("Prime Empire Backend is LIVE 🚀");
 });
 
-// Test API route
-app.get("/api/status", (req, res) => {
-  res.status(200).json({
-    success: true,
-    service: "Prime Empire API",
-    uptime: process.uptime()
-  });
+// Health check route (optional but useful)
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
-// Global error handler (basic safety)
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({
-    success: false,
-    message: "Internal Server Error"
-  });
-});
-
-// Port setup (Railway uses process.env.PORT)
+// IMPORTANT: Railway uses dynamic PORT
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(` Server running on port ${PORT}`);
+// IMPORTANT: bind to 0.0.0.0 for Railway
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
